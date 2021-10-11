@@ -1,0 +1,32 @@
+html,
+body,
+#root,
+.page-container {
+  height: 100%;
+  margin-top: 3em;
+}
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.sticky-bottom {
+  margin-top: auto;
+}
+
+.houseIcon {
+  width: 400px;
+}
+
+.homeCard:hover,
+.profileCard:hover {
+  cursor: pointer;
+  background-color: rgb(245, 245, 245);
+}
+
+@media (max-width: 730px) {
+  .screenButton {
+    width: 100%;
+  }
+}
