@@ -29,4 +29,8 @@ body,
   .screenButton {
     width: 100%;
   }
+
+  .card {
+    height: auto !important;
+  }
 }
