@@ -11,9 +11,9 @@ export const validateInput = (inputData) => {
 
 //login-test
 export const loginApi = () => {
-  localStorage.setItem("jwt", "234215");
+  localStorage.setItem("jwt-simulation", "234215");
 };
 export const logoutApi = () => {
-  localStorage.removeItem("jwt");
+  localStorage.removeItem("jwt-simulation");
   window.location = "/";
 };
