@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 import { Navbar, Nav } from "react-bootstrap";
 
@@ -8,10 +8,12 @@ import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 //apis
 import { logoutApi } from "../utilities/main";
-import User from "../requests/User";
+// import User from "../requests/User";
 
 export default function Header({ isLoggedIn }) {
-  const [user, setUser] = useState({ name: "Johan", email: "" });
+  // const [user, setUser] = useState({ name: "Johan", email: "" });
+
+  const user = { name: "Johan", email: "" };
 
   //data retriever
   // let isActive = true;

@@ -5,7 +5,7 @@ import { Container, Col, Row } from "react-bootstrap";
 import LoginForm from "../components/Forms/LoginForm";
 
 //requests
-import User from "../requests/User";
+// import User from "../requests/User";
 
 //test login
 import { loginApi } from "../utilities/main";
