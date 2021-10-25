@@ -25,6 +25,8 @@ body,
   background-color: rgb(245, 245, 245);
 }
 
+
+/* for screen sizes 730px and below */
 @media (max-width: 730px) {
   .screenButton {
     width: 100%;

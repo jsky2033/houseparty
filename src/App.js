@@ -4,41 +4,35 @@ import "./App.css";
 import "semantic-ui-css/semantic.min.css";
 
 //import router modules
-import { Route, BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 
-//components
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-
-//pages
+// pages
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import House from "./pages/House";
 import Blog from "./pages/Blog";
 import Search from "./pages/Search";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+
+// routes
+import PrivateRoute from "./routes/PrivateRoute";
+import PublicRoute from "./routes/PublicRoute";
+import LoginRoute from "./routes/LoginRoute";
 
 function App() {
   return (
     <Router>
-      <div className="page-container">
-        <Header />
-        <Route exact path="/">
-          <Home />
-        </Route>
-        <Route path="/profile">
-          <Profile />
-        </Route>
-        <Route path="/house">
-          <House />
-        </Route>
-        <Route path="/house-blog">
-          <Blog />
-        </Route>
-        <Route path="/house-search">
-          <Search />
-        </Route>
-        <Footer />
-      </div>
+      {/* Landing Pages */}
+      <PublicRoute exact path="/" component={Home} />
+      {/* Private Routes */}
+      <PrivateRoute path="/profile" component={Profile} />
+      <PrivateRoute path="/house" component={House} />
+      <PrivateRoute path="/blog" component={Blog} />
+      <PrivateRoute path="/search" component={Search} />
+      {/* Login Routes */}
+      <LoginRoute path="/login" component={Login} />
+      <LoginRoute path="/register" component={Register} />
     </Router>
   );
 }
