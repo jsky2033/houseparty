@@ -12,7 +12,7 @@ const PublicRoute = ({ component: Component, ...rest }) => {
   // we can also get singular user data here such as a user key for the pages to use
   // right now it does not really verify that it is the right jwt token, just that there is a jwt token
   let isLoggedIn = false;
-  if (localStorage.getItem("jwt")) {
+  if (localStorage.getItem("jwt-simulation")) {
     isLoggedIn = true;
   }
 
