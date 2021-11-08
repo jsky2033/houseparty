@@ -5,29 +5,27 @@ import { Route, Redirect } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
+//firebase context
+import { useAuth } from "../contexts/AuthContext";
+
 const PrivateRoute = ({ component: Component, ...rest }) => {
-  // jwt token logic should happen here to determine if the user is logged in
-  // we can also get singular user data here such as a user key for the pages to use
-  // right now it does not really verify that it is the right jwt token, just that there is a jwt token
-  let isLoggedIn = false;
-  if (localStorage.getItem("jwt-simulation")) {
-    isLoggedIn = true;
-  }
+  //check if current user exists
+  const { currentUser } = useAuth();
+
+  console.log(currentUser);
 
   return (
     <Route
       {...rest}
       render={(props) =>
-        isLoggedIn ? (
+        currentUser ? (
           <div className="page-container">
-            <Header isLoggedIn={isLoggedIn} />
+            <Header />
             <Component {...props} />
             <Footer />
           </div>
         ) : (
-          <Redirect
-            to={{ pathname: "/login", state: { from: props.location } }}
-          />
+          <Redirect to={{ pathname: "/login" }} />
         )
       }
     />

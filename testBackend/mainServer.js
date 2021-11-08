@@ -10,49 +10,26 @@ app.use(cors());
 
 // Test Profile
 
-const profile = {
-  name: "Johan",
-  email: "jsky2033@gmail.com",
-  password: "123",
-};
-
-const profileShow = {
-  name: "Johan",
-  email: "jsky2033@gmail.com",
-};
+var profile = null;
 
 // Profile Page
 
+app.get("/getProfile", (req, res) => {
+  res.json(profile);
+});
+
 app.post("/editProfile", (req, res) => {
-  console.log(req.body);
+  profile = req.body;
   res.status(204).send();
 });
 
 // Login + Registration
 
-// user actions
-
-app.post("/editProfile", (req, res) => {
-  console.log(req.body);
-  res.status(204).send();
-});
-
-app.post("/loginUsr", (req, res) => {
-  if (req.body.password === profile.password) {
-    res.status(204).send();
-  } else {
-    res.status(401).send();
-  }
-});
-
+//gives uid from firebase along with other information to MongoDB
 app.post("/registerUsr", (req, res) => {
+  profile = req.body;
+  console.log(profile);
   res.status(204).send();
-});
-
-//user data retrieval
-
-app.get("/getUsrData", (req, res) => {
-  res.json(profileShow);
 });
 
 app.listen(port, () => {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Container,
   Card,
@@ -33,6 +33,9 @@ import ProfileForm from "../components/Forms/ProfileForm";
 //requests
 import User from "../requests/User";
 
+//firebase utility
+import { useAuth } from "../contexts/AuthContext";
+
 export default function Profile() {
   //styles
   const styles = {
@@ -56,25 +59,57 @@ export default function Profile() {
   //Modal Handling for Profile Card
   const [profileStatus, setProfileStatus] = useState(null);
   const [showProfile, setShowProfile] = useState(false);
-  const handleClose = () => setShowProfile(false);
+  const handleClose = () => {
+    window.location.reload();
+    setShowProfile(false);
+  };
   const handleShow = () => {
     setShowProfile(true);
     setProfileStatus(null);
   };
+  const [userProfile, setUserProfile] = useState(null);
+  //Auth Context
+  const { updateUserEmail } = useAuth();
 
   //BACKEND
+
   //Submission of Profile Card
   const editProfile = async (profileData) => {
     setProfileStatus("PENDING");
     try {
-      const response = await User.post("/editProfile", profileData);
-      if (response.status === 204) {
+      //update email in firebase
+      await updateUserEmail(profileData.email);
+
+      //update user in database
+      // const response = await User.post("/editProfile", profileData);
+      // if (response.status === 204) {
         setProfileStatus("SUCCESS");
-      }
+      // } else {
+      //   throw new Error("Database update failed");
+      // }
     } catch (err) {
-      setProfileStatus("FAIL");
+      if (err.code === "auth/requires-recent-login") {
+        setProfileStatus("LOGIN_AGAIN");
+      } else {
+        setProfileStatus("FAIL");
+      }
     }
   };
+
+  useEffect(() => {
+    let isActive = true;
+    const getUsrData = async () => {
+      const response = await User.get("/getProfile");
+      if (isActive) {
+        setUserProfile(response.data);
+      }
+    };
+
+    getUsrData();
+    return () => {
+      isActive = false;
+    };
+  }, [userProfile]);
 
   return (
     <Container>
@@ -110,7 +145,7 @@ export default function Profile() {
               <Form.Control
                 className="mb-2"
                 id="inlineFormInput"
-                placeholder="Jane Doe"
+                placeholder={userProfile ? userProfile.name : null}
                 readOnly
               />
               <Form.Label htmlFor="inlineFormInputGroup" visuallyHidden>
@@ -120,7 +155,7 @@ export default function Profile() {
               <InputGroup className="mb-2">
                 <FormControl
                   id="inlineFormInputGroup"
-                  placeholder="123@gmail.com"
+                  placeholder={userProfile ? userProfile.email : null}
                   readOnly
                 />
               </InputGroup>
@@ -131,7 +166,7 @@ export default function Profile() {
               <InputGroup className="mb-2">
                 <FormControl
                   id="inlineFormInputGroup"
-                  placeholder="+ 321 456 7890"
+                  placeholder={userProfile ? userProfile.phone : null}
                   readOnly
                 />
               </InputGroup>
@@ -166,6 +201,7 @@ export default function Profile() {
           <ProfileForm
             editProfile={editProfile}
             profileStatus={profileStatus}
+            userProfile={userProfile}
           />
         </Modal>
       </>

@@ -7,29 +7,26 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 //apis
-import { logoutApi } from "../utilities/main";
 // import User from "../requests/User";
 
-export default function Header({ isLoggedIn }) {
-  // const [user, setUser] = useState({ name: "Johan", email: "" });
+//firebase context
+import { useAuth } from "../contexts/AuthContext";
 
-  const user = { name: "Johan", email: "" };
+export default function Header() {
 
-  //data retriever
-  // let isActive = true;
-  // const getUsrData = async () => {
-  //   const response = await User.get("/getUsrData");
-  //   if (isActive) {
-  //     setUser(response.data);
-  //   }
-  // };
 
-  // useEffect(() => {
-  //   getUsrData();
-  //   return () => {
-  //     isActive = false;
-  //   };
-  // }, []);
+  //Auth Context
+  const { logout, currentUser } = useAuth();
+
+  //logout handler
+  const logoutUser = async () => {
+    try {
+      await logout();
+      window.location = "/login";
+    } catch (err) {
+      alert(err);
+    }
+  };
 
   //STYLES
 
@@ -51,7 +48,7 @@ export default function Header({ isLoggedIn }) {
           <Nav.Link href="/blog">Blog</Nav.Link>
           <Nav.Link href="/search">Search</Nav.Link>
         </Nav>
-        {!isLoggedIn ? (
+        {!currentUser ? (
           <Nav>
             <Nav.Link href="/login">Login</Nav.Link>
             <Nav.Link href="/register">Register</Nav.Link>
@@ -60,9 +57,9 @@ export default function Header({ isLoggedIn }) {
           <Nav>
             <Nav.Link>
               <FontAwesomeIcon icon={faUser} style={styles.faIcon} />
-              {user.name}
+              {currentUser ? currentUser.email : null}
             </Nav.Link>
-            <Nav.Link onClick={() => logoutApi()}>Logout</Nav.Link>
+            <Nav.Link onClick={logoutUser}>Logout</Nav.Link>
           </Nav>
         )}
       </Navbar.Collapse>

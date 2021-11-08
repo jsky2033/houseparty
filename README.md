@@ -32,3 +32,30 @@ In the project directory, you can run:
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+# Firebase
+
+Firebase functions essentially return a promise so they all need to be inside async functions. They are extracted directly from the firebase/auth library. 
+
+However the firebase configuration/initialization needs to then be used as a provider to tell the functions which Firebase app is utilizing the services.
+
+Automatic sign in when an account is created.
+
+Firebase has tokens it has in localstorage to tell if a user is already logged in. This is interacted with using the auth provider object exported from firebase.js. 
+
+## The auth variable
+
+This can be used to validate that the current user is logged in. 
+
+onAuthStateChanged is like useEffect but it will trigger whenever the authentication state change. Meaning the auth variable has changed. 
+
+
+## Context
+
+This is so that a global value for the user is provided for all of the routes. The Context provider wraps around the application in general and its children are the functions mentioned in it. 
+
+The functions are accessible by all child components. 
+
+These functions allow the child components to change state within the Context Provider and then trat that state like a persistent, global value. 
+
+Note that the loading functionality is needed because the firebase auth provider needs some time to fetch the current user and when it is not present, any checks for it in the auth context will yield undefined even when it is there.

@@ -7,13 +7,14 @@ import LoginForm from "../components/Forms/LoginForm";
 //requests
 // import User from "../requests/User";
 
-//test login
-import { loginApi } from "../utilities/main";
+//firebase utility
+import { useAuth } from "../contexts/AuthContext";
 
 export default function Login() {
   //STATE
-  //Modal Handling for Profile Card
   const [status, setStatus] = useState(null);
+  //Auth Context
+  const { login } = useAuth();
 
   //ONLOAD
   useEffect(() => {
@@ -23,17 +24,13 @@ export default function Login() {
   }, [status]);
 
   //BACKEND
-  //Submission of Profile Card
   const usrLogin = async (loginData) => {
     setStatus("PENDING");
     try {
-      // const response = await User.post("/loginUsr", loginData);
-      const response = { status: 204 };
-      if (response.status === 204) {
-        setStatus("SUCCESS");
-        loginApi();
-      }
+      await login(loginData.email, loginData.password);
+      setStatus("SUCCESS");
     } catch (err) {
+      console.log(err);
       setStatus("FAIL");
     }
   };

@@ -1,21 +1,61 @@
-// import React from "react";
-// import {auth}
+import React, { useContext, useState, useEffect } from "react";
+import { auth } from "../firebase";
 
-// const AuthContext = React.createContext();
+//firebase functions
+import {
+  createUserWithEmailAndPassword,
+  signOut,
+  signInWithEmailAndPassword,
+  updateEmail,
+} from "firebase/auth";
 
-// export function useAuth() {
-//   return useContext(AuthContext);
-// }
+const AuthContext = React.createContext();
 
-// export function AuthProvider({ children }) {
-//   const [currentUser, setCurrentUser] = useState();
+export function useAuth() {
+  return useContext(AuthContext);
+}
 
-//   function signup(email, password){
+export function AuthProvider({ children }) {
+  const [currentUser, setCurrentUser] = useState();
+  const [loading, setLoading] = useState(true);
 
-//   }
+  function signup(email, password) {
+    return createUserWithEmailAndPassword(auth, email, password);
+  }
 
-//   const value = {
-//     currentUser,
-//   };
-//   return <AuthContext.Provider>{children}</AuthContext.Provider>;
-// }
+  function login(email, password) {
+    return signInWithEmailAndPassword(auth, email, password);
+  }
+
+  function logout() {
+    return signOut(auth);
+  }
+
+  function updateUserEmail(email) {
+    return updateEmail(auth.currentUser, email);
+  }
+
+  useEffect(() => {
+    //sets current user only once when component is mounted
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setCurrentUser(user);
+      setLoading(false);
+    });
+
+    //the returned function unsubscribes the user whenever the component is unmounted
+    return unsubscribe;
+  }, []);
+
+  const value = {
+    currentUser,
+    signup,
+    login,
+    logout,
+    updateUserEmail,
+  };
+  return (
+    <AuthContext.Provider value={value}>
+      {!loading && children}
+    </AuthContext.Provider>
+  );
+}

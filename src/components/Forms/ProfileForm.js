@@ -20,7 +20,11 @@ import {
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 
-export default function ProfileForm({ editProfile, profileStatus }) {
+export default function ProfileForm({
+  editProfile,
+  profileStatus,
+  userProfile,
+}) {
   //styles
   const styles = {
     avatar: {
@@ -39,9 +43,7 @@ export default function ProfileForm({ editProfile, profileStatus }) {
 
   //STATE
   const [profileData, setProfileData] = useState({
-    name: "",
-    email: "",
-    phone: "",
+    ...userProfile,
   });
 
   //event handlers
@@ -66,6 +68,8 @@ export default function ProfileForm({ editProfile, profileStatus }) {
         <Alert variant="warning">Changing Settings...</Alert>
       ) : profileStatus === "FAIL" ? (
         <Alert variant="danger">An error has ocurred</Alert>
+      ) : profileStatus === "LOGIN_AGAIN" ? (
+        <Alert variant="danger">Please login again to change settings</Alert>
       ) : null}
       <h1 className="text-center">Edit Profile</h1>
       <Row>
@@ -91,7 +95,7 @@ export default function ProfileForm({ editProfile, profileStatus }) {
               id="inlineFormInputGroup"
               placeholder="123@gmail.com"
               name="email"
-              value={profileData.emal}
+              value={profileData.email}
               onChange={profileDataUpdate}
             />
           </InputGroup>

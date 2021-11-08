@@ -4,25 +4,39 @@ import { Container, Col, Row } from "react-bootstrap";
 //components
 import RegisterForm from "../components/Forms/RegisterForm";
 
-//requests
+//firebase utility
+import { useAuth } from "../contexts/AuthContext";
+
+//apis
 import User from "../requests/User";
 
 export default function Register() {
   //STATE
-  //Modal Handling for Profile Card
   const [status, setStatus] = useState(null);
+  //Auth Context
+  const { signup } = useAuth();
 
   //BACKEND
-  //Submission of Profile Card
-  const usrRegister = async (loginData) => {
+  const usrRegister = async (registerData) => {
     setStatus("PENDING");
     try {
-      const response = await User.post("/registerUsr", loginData);
-      if (response.status === 204) {
-        setStatus("SUCCESS");
+      //register email in firebase
+      const response = await signup(registerData.email, registerData.password);
+      const uid = response.user.uid;
+
+      //register email in database
+      const expressResponse = await User.post("/registerUsr", {
+        uid: uid,
+        email: registerData.email,
+        name: registerData.name,
+        phone: "",
+      });
+      if (expressResponse.status !== 204) {
+        throw new Error("Database Entry failed!");
       }
     } catch (err) {
       setStatus("FAIL");
+      console.log(err);
     }
   };
 
