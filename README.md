@@ -60,6 +60,24 @@ These functions allow the child components to change state within the Context Pr
 
 Note that the loading functionality is needed because the firebase auth provider needs some time to fetch the current user and when it is not present, any checks for it in the auth context will yield undefined even when it is there.
 
+# Tasks done so far
+
+1. MERN flow completed: There is now a continous flow between the frontend, backend server processors and the database. Fully completed features are now ready to start being implemented into the application. 
+2. Firebase password/account manager and MongoDD have been integrated for the user. 
+3. Profile Page features complete: users can now change their profile information. 
+4. House Page re-designed and completed: users can now create a house and update information about the house. 
+5. Deployment of Express backend server using Heroku now means the app is truly online.
+
+# Tasks to be done
+
+1. The Blog page needs to be made functional for the user.
+2. The People page needs to be made functional for the user.
+3. An inert profile page for other users needs to be functional for the user so that the app can start to be a truly multi-user system. The add housemates feature needs to be made functional here especially.
+4. Housemate groupchat feature needs to be implemented. 
+5. Geolocation of Houses on the map needs to be done and interactivity with the map needs to be implemented. 
+6. Forgot password feature needs to be implemented. 
+
+
 # Miscallaneous Tasks
 
 1. Create delete function for user
