@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Container,
   Card,
@@ -20,7 +20,6 @@ import {
   faCubes,
   faEnvelope,
   faHouseUser,
-  faMapMarkerAlt,
   faPhone,
   faUser,
   faUsers,
@@ -31,9 +30,9 @@ import FriendCard from "../components/FriendCard";
 import ProfileForm from "../components/Forms/ProfileForm";
 
 //requests
-import User from "../requests/User";
+import User from "../requests/UserAPI";
 
-//firebase utility
+//auth context
 import { useAuth } from "../contexts/AuthContext";
 
 export default function Profile() {
@@ -67,9 +66,8 @@ export default function Profile() {
     setShowProfile(true);
     setProfileStatus(null);
   };
-  const [userProfile, setUserProfile] = useState(null);
   //Auth Context
-  const { updateUserEmail } = useAuth();
+  const { updateUserEmail, currentUserData, currentUser } = useAuth();
 
   //BACKEND
 
@@ -81,12 +79,16 @@ export default function Profile() {
       await updateUserEmail(profileData.email);
 
       //update user in database
-      // const response = await User.post("/editProfile", profileData);
-      // if (response.status === 204) {
+      const { email, ...other } = profileData;
+      const response = await User.put(`/${currentUser.uid}`, {
+        ...other,
+        authId: currentUser.uid,
+      });
+      if (response.status === 200) {
         setProfileStatus("SUCCESS");
-      // } else {
-      //   throw new Error("Database update failed");
-      // }
+      } else {
+        throw new Error("Database update failed");
+      }
     } catch (err) {
       if (err.code === "auth/requires-recent-login") {
         setProfileStatus("LOGIN_AGAIN");
@@ -95,21 +97,6 @@ export default function Profile() {
       }
     }
   };
-
-  useEffect(() => {
-    let isActive = true;
-    const getUsrData = async () => {
-      const response = await User.get("/getProfile");
-      if (isActive) {
-        setUserProfile(response.data);
-      }
-    };
-
-    getUsrData();
-    return () => {
-      isActive = false;
-    };
-  }, [userProfile]);
 
   return (
     <Container>
@@ -145,7 +132,7 @@ export default function Profile() {
               <Form.Control
                 className="mb-2"
                 id="inlineFormInput"
-                placeholder={userProfile ? userProfile.name : null}
+                placeholder={currentUserData ? currentUserData.username : null}
                 readOnly
               />
               <Form.Label htmlFor="inlineFormInputGroup" visuallyHidden>
@@ -155,7 +142,7 @@ export default function Profile() {
               <InputGroup className="mb-2">
                 <FormControl
                   id="inlineFormInputGroup"
-                  placeholder={userProfile ? userProfile.email : null}
+                  placeholder={currentUserData ? currentUserData.email : null}
                   readOnly
                 />
               </InputGroup>
@@ -166,7 +153,7 @@ export default function Profile() {
               <InputGroup className="mb-2">
                 <FormControl
                   id="inlineFormInputGroup"
-                  placeholder={userProfile ? userProfile.phone : null}
+                  placeholder={currentUserData ? currentUserData.phone : null}
                   readOnly
                 />
               </InputGroup>
@@ -201,59 +188,9 @@ export default function Profile() {
           <ProfileForm
             editProfile={editProfile}
             profileStatus={profileStatus}
-            userProfile={userProfile}
+            userProfile={currentUserData}
           />
         </Modal>
-      </>
-
-      <>
-        <Divider horizontal>
-          <Header as="h4">
-            <Icon name="home" />
-            House
-          </Header>
-        </Divider>
-        <Card style={styles.card} className="profileCard">
-          <Row>
-            <Col xs={12} md={6}>
-              <Image
-                fluid
-                thumbnail
-                src="/pictures/profile/testImages/test1.jpg"
-              ></Image>
-            </Col>
-            <Col xs={12} md={6} className="mt-3 mt-md-0">
-              <h2>Description</h2>
-              <p className="lead">
-                Sit amet consectetur adipisicing elit. Dignissimos eum totam
-                odit voluptates repellendus adipisci facere quos, similique nisi
-                modi aperiam
-              </p>
-
-              <Form.Label htmlFor="inlineFormInput" visuallyHidden>
-                <FontAwesomeIcon icon={faMapMarkerAlt} style={styles.faIcon} />
-                Address Line 1
-              </Form.Label>
-              <Form.Control
-                className="mb-2"
-                id="inlineFormInput"
-                placeholder="Jane Doe"
-                readOnly
-              />
-
-              <Form.Label htmlFor="inlineFormInput" visuallyHidden>
-                <FontAwesomeIcon icon={faMapMarkerAlt} style={styles.faIcon} />
-                Address Line 2
-              </Form.Label>
-              <Form.Control
-                className="mb-2"
-                id="inlineFormInput"
-                placeholder="Jane Doe"
-                readOnly
-              />
-            </Col>
-          </Row>
-        </Card>
       </>
 
       <>

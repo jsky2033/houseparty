@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+
+//house editing form
+import HouseForm from "../components/Forms/HouseForm";
 
 //Bootstrap
 import {
@@ -10,7 +13,7 @@ import {
   Form,
   InputGroup,
   FormControl,
-  Button,
+  Modal,
 } from "react-bootstrap";
 
 //Semanitc UI
@@ -20,12 +23,7 @@ import { Divider, Header, Icon } from "semantic-ui-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faDollarSign,
-  faFileInvoiceDollar,
   faMapMarkerAlt,
-  faStar,
-  faUsers,
-  faCamera,
-  faImages,
   faSwimmingPool,
   faDumbbell,
   faSink,
@@ -35,16 +33,20 @@ import {
 //components
 import FriendCard from "../components/FriendCard";
 
+//requests
+import HouseAPI from "../requests/HouseAPI";
+
+//use auth context
+import { useAuth } from "../contexts/AuthContext";
+
 const styles = {
-  houseInfo: {
-    marginTop: "3em",
-  },
+  houseInfo: {},
   avatar: {
     width: "10em",
   },
   card: {
     padding: "3em",
-    marginBottom: "3em",
+    marginBottom: "2em",
   },
   faIcon: {
     marginRight: ".5em",
@@ -57,9 +59,87 @@ const styles = {
   button: {
     width: "100%",
   },
+  houseInfoEmpty: {
+    textAlign: "center",
+  },
 };
 
 export default function House() {
+  //getting user data from context
+  const { currentUserData, currentUser } = useAuth();
+
+
+  //STATE
+  //Modal Handling for House Card
+  const [houseStatus, setHouseStatus] = useState(null);
+  const [showHouse, setShowHouse] = useState(null);
+  const handleClose = () => {
+    window.location.reload();
+    setShowHouse(null);
+  };
+  const handleShow = (type) => {
+    setShowHouse(type);
+    setHouseStatus(null);
+  };
+  const [houseData, setHouseData] = useState(null);
+  const [houseInfo, setHouseInfo] = useState(null);
+
+  //BACKEND
+
+  //Fetching house data
+
+  useEffect(() => {
+    let isActive = true;
+
+    const getHouseData = async () => {
+      const response = await HouseAPI.get(`/${currentUser.uid}`);
+      if (response.data) {
+        setHouseData(response.data);
+        setHouseInfo(response.data.information);
+      }
+    };
+
+    if (isActive) {
+      getHouseData();
+    }
+
+    return (isActive = false);
+  }, [currentUser]);
+
+  //Submission of House Card
+  const editHouse = async (houseDataParam, houseInfoParam) => {
+    setHouseStatus("PENDING");
+    try {
+      var response;
+      //if the house already exists, update it
+      if (houseData) {
+        response = await HouseAPI.put(`/${currentUser.uid}`, {
+          ...houseDataParam,
+          authId: currentUser.uid,
+          information: {
+            ...houseInfoParam,
+          },
+        });
+      } else {
+        response = await HouseAPI.post(`/${currentUser.uid}`, {
+          ...houseDataParam,
+          authId: currentUser.uid,
+        });
+      }
+      if (response.status === 200) {
+        setHouseStatus("SUCCESS");
+      } else {
+        throw new Error("Database update failed");
+      }
+    } catch (err) {
+      if (err.code === "auth/requires-recent-login") {
+        setHouseStatus("LOGIN_AGAIN");
+      } else {
+        setHouseStatus("FAIL");
+      }
+    }
+  };
+
   return (
     <Container>
       <>
@@ -69,10 +149,16 @@ export default function House() {
             Owner
           </Header>
         </Divider>
-        <FriendCard options="owner" />
+        <div style={{ marginBottom: "3em" }}>
+          <FriendCard
+            options="owner"
+            name={currentUserData ? currentUserData.username : null}
+            email={currentUserData ? currentUserData.email : null}
+          />
+        </div>
       </>
 
-      <div style={styles.houseInfo}>
+      {/* <div style={styles.houseInfo}>
         <Divider horizontal>
           <Header as="h4">
             <Icon name="images" />
@@ -104,6 +190,85 @@ export default function House() {
             </Col>
           </Row>
         </Card>
+      </div> */}
+
+      <div style={styles.houseInfo}>
+        <Divider horizontal>
+          <Header as="h4">
+            <Icon name="home" />
+            House
+          </Header>
+        </Divider>
+        <Card
+          style={styles.card}
+          className="houseCard"
+          onClick={() => handleShow("description")}
+        >
+          {houseData ? (
+            <>
+              <Row>
+                <Col xs={12} md={6}>
+                  <Image
+                    fluid
+                    thumbnail
+                    src="/pictures/house/testImages/test1.jpg"
+                  ></Image>
+                </Col>
+                <Col xs={12} md={6} className="mt-3 mt-md-0">
+                  <h2>Description</h2>
+                  <p className="lead">
+                    {houseData ? houseData.description : null}
+                  </p>
+
+                  <Form.Label htmlFor="inlineFormInput" visuallyHidden>
+                    <FontAwesomeIcon
+                      icon={faMapMarkerAlt}
+                      style={styles.faIcon}
+                    />
+                    Address
+                  </Form.Label>
+                  <Form.Control
+                    className="mb-2"
+                    id="inlineFormInput"
+                    placeholder={houseData ? houseData.address : null}
+                    readOnly
+                  />
+
+                  <Form.Label htmlFor="inlineFormInput" visuallyHidden>
+                    <FontAwesomeIcon
+                      icon={faMapMarkerAlt}
+                      style={styles.faIcon}
+                    />
+                    Zip Code
+                  </Form.Label>
+                  <Form.Control
+                    className="mb-2"
+                    id="inlineFormInput"
+                    placeholder={houseData ? houseData.zipCode : null}
+                    readOnly
+                  />
+                </Col>
+              </Row>
+            </>
+          ) : (
+            <div style={styles.houseInfoEmpty}>
+              <Icon name="plus" />
+              <Icon name="home" />
+              <h3>Add a House</h3>
+            </div>
+          )}
+        </Card>
+        <Modal
+          show={showHouse === "description" ? true : false}
+          onHide={handleClose}
+        >
+          <HouseForm
+            editHouse={editHouse}
+            houseStatus={houseStatus}
+            userHouse={houseData}
+            type="description"
+          />
+        </Modal>
       </div>
 
       <>
@@ -114,14 +279,18 @@ export default function House() {
           </Header>
         </Divider>
 
-        <Row className="row-cols-1 mb-5">
-          <Col>
-            <FriendCard options="friends" />
-          </Col>
-
-          <Col className="mt-5">
-            <FriendCard options="friends" />
-          </Col>
+        <Row className="row-cols-1">
+          <Card
+            style={styles.card}
+            className="houseCard"
+            onClick={() => (window.location = "/people")}
+          >
+            <div style={styles.houseInfoEmpty}>
+              <Icon name="plus" />
+              <Icon name="user" />
+              <h3>Add Housemates</h3>
+            </div>
+          </Card>
         </Row>
       </>
 
@@ -133,146 +302,99 @@ export default function House() {
           </Header>
         </Divider>
 
-        <Card style={styles.card} className="profileCard">
-          <Row className=" align-items-center">
-            <Col xs={12} sm={6}>
-              <Form.Label htmlFor="inlineFormInput" visuallyHidden>
-                <FontAwesomeIcon icon={faMapMarkerAlt} style={styles.faIcon} />
-                Address Line 1
-              </Form.Label>
-              <Form.Control
-                className="mb-2"
-                id="inlineFormInput"
-                placeholder="156 Streety Street"
-                readOnly
-              />
+        <Card
+          style={styles.card}
+          className="houseCard"
+          onClick={() => handleShow("information")}
+        >
+          {houseData ? (
+            <>
+              <Row>
+                <Col xs={12} sm={6}>
+                  <Form.Label htmlFor="inlineFormInput" visuallyHidden>
+                    <FontAwesomeIcon
+                      icon={faSwimmingPool}
+                      style={styles.faIcon}
+                    />
+                    Pool
+                  </Form.Label>
+                  <Form.Control
+                    className="mb-2"
+                    id="inlineFormInput"
+                    placeholder={houseInfo ? houseInfo.poolDesc : null}
+                    readOnly
+                    as="textarea"
+                  />
 
-              <Form.Label htmlFor="inlineFormInput" visuallyHidden>
-                <FontAwesomeIcon icon={faMapMarkerAlt} style={styles.faIcon} />
-                Address Line 2
-              </Form.Label>
-              <Form.Control
-                className="mb-2"
-                id="inlineFormInput"
-                placeholder="156 Streety Street"
-                readOnly
-              />
-              <Form.Label htmlFor="inlineFormInputGroup" visuallyHidden>
-                <FontAwesomeIcon icon={faUsers} style={styles.faIcon} />
-                Residents
-              </Form.Label>
-              <h4 className="mt-0">4</h4>
-            </Col>
+                  <Form.Label htmlFor="inlineFormInput" visuallyHidden>
+                    <FontAwesomeIcon icon={faDumbbell} style={styles.faIcon} />
+                    Gym
+                  </Form.Label>
+                  <Form.Control
+                    className="mb-2"
+                    id="inlineFormInput"
+                    placeholder={houseInfo ? houseInfo.gymDesc : null}
+                    readOnly
+                    as="textarea"
+                  />
+                  <Form.Label htmlFor="inlineFormInput" visuallyHidden>
+                    <FontAwesomeIcon icon={faSink} style={styles.faIcon} />
+                    Kitchen
+                  </Form.Label>
+                  <Form.Control
+                    className="mb-2"
+                    id="inlineFormInput"
+                    placeholder={houseInfo ? houseInfo.kitchenDesc : null}
+                    readOnly
+                    as="textarea"
+                  />
+                </Col>
 
-            <Col xs={12} sm={6}>
-              <Form.Label htmlFor="inlineFormInputGroup" visuallyHidden>
-                <FontAwesomeIcon icon={faDollarSign} style={styles.faIcon} />
-                House Value
-              </Form.Label>
-              <InputGroup className="mb-2">
-                <FormControl
-                  id="inlineFormInputGroup"
-                  placeholder="250,000"
-                  readOnly
+                <Col xs={12} sm={6}>
+                  <Form.Label htmlFor="inlineFormInputGroup" visuallyHidden>
+                    <FontAwesomeIcon
+                      icon={faDollarSign}
+                      style={styles.faIcon}
+                    />
+                    Washer/Dryer
+                  </Form.Label>
+                  <InputGroup className="mb-2">
+                    <FormControl
+                      id="inlineFormInputGroup"
+                      placeholder={houseInfo ? houseInfo.laundryDesc : null}
+                      readOnly
+                    />
+                  </InputGroup>
+                  <Form.Label htmlFor="inlineFormInputGroup" visuallyHidden>
+                    <FontAwesomeIcon icon={faTree} style={styles.faIcon} />
+                    Garden/Yard
+                  </Form.Label>
+                  <InputGroup className="mb-2">
+                    <FormControl
+                      id="inlineFormInputGroup"
+                      placeholder={houseInfo ? houseInfo.gardenDesc : null}
+                      readOnly
+                    />
+                  </InputGroup>
+                </Col>
+              </Row>
+              <Modal
+                show={showHouse === "information" ? true : false}
+                onHide={handleClose}
+              >
+                <HouseForm
+                  editHouse={editHouse}
+                  houseStatus={houseStatus}
+                  userHouse={houseData}
+                  type="information"
                 />
-              </InputGroup>
-              <Form.Label htmlFor="inlineFormInputGroup" visuallyHidden>
-                <FontAwesomeIcon
-                  icon={faFileInvoiceDollar}
-                  style={styles.faIcon}
-                />
-                Rent Value
-              </Form.Label>
-              <InputGroup className="mb-2">
-                <FormControl
-                  id="inlineFormInputGroup"
-                  placeholder="1,500"
-                  readOnly
-                />
-              </InputGroup>
-
-              <Form.Label htmlFor="inlineFormInputGroup" visuallyHidden>
-                <FontAwesomeIcon icon={faStar} style={styles.faIcon} />
-                Rating
-              </Form.Label>
-              <h4 className="mt-0">4.3</h4>
-            </Col>
-          </Row>
-        </Card>
-      </div>
-
-      <div style={styles.houseInfo}>
-        <Divider horizontal>
-          <Header as="h4">
-            <Icon name="bath" />
-            Utilties
-          </Header>
-        </Divider>
-
-        <Card style={styles.card} className="profileCard">
-          <Row>
-            <Col xs={12} sm={6}>
-              <Form.Label htmlFor="inlineFormInput" visuallyHidden>
-                <FontAwesomeIcon icon={faSwimmingPool} style={styles.faIcon} />
-                Pool
-              </Form.Label>
-              <Form.Control
-                className="mb-2"
-                id="inlineFormInput"
-                placeholder="5 ft deep pool with new tiles"
-                readOnly
-                as="textarea"
-              />
-
-              <Form.Label htmlFor="inlineFormInput" visuallyHidden>
-                <FontAwesomeIcon icon={faDumbbell} style={styles.faIcon} />
-                Gym
-              </Form.Label>
-              <Form.Control
-                className="mb-2"
-                id="inlineFormInput"
-                placeholder="Standard weight set, bench press, pelotons."
-                readOnly
-                as="textarea"
-              />
-              <Form.Label htmlFor="inlineFormInput" visuallyHidden>
-                <FontAwesomeIcon icon={faSink} style={styles.faIcon} />
-                Kitchen
-              </Form.Label>
-              <Form.Control
-                className="mb-2"
-                id="inlineFormInput"
-                placeholder="Stove, two fridges and granite countertop."
-                readOnly
-                as="textarea"
-              />
-            </Col>
-
-            <Col xs={12} sm={6}>
-              <Form.Label htmlFor="inlineFormInputGroup" visuallyHidden>
-                <FontAwesomeIcon icon={faDollarSign} style={styles.faIcon} />
-                Washer/Dryer
-              </Form.Label>
-              <InputGroup className="mb-2">
-                <FormControl
-                  id="inlineFormInputGroup"
-                  placeholder="Yes"
-                  readOnly
-                />
-              </InputGroup>
-              <Form.Label htmlFor="inlineFormInputGroup" visuallyHidden>
-                <FontAwesomeIcon icon={faTree} style={styles.faIcon} />
-                Garden/Yard
-              </Form.Label>
-              <InputGroup className="mb-2">
-                <FormControl
-                  id="inlineFormInputGroup"
-                  placeholder="N/A"
-                  readOnly
-                />
-              </InputGroup>
-            </Col>
-          </Row>
+              </Modal>
+            </>
+          ) : (
+            <div style={styles.houseInfoEmpty}>
+              <h3>You have not created a house yet</h3>
+            </div>
+          )}
         </Card>
       </div>
     </Container>

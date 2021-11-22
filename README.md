@@ -59,3 +59,8 @@ The functions are accessible by all child components.
 These functions allow the child components to change state within the Context Provider and then trat that state like a persistent, global value. 
 
 Note that the loading functionality is needed because the firebase auth provider needs some time to fetch the current user and when it is not present, any checks for it in the auth context will yield undefined even when it is there.
+
+# Miscallaneous Tasks
+
+1. Create delete function for user
+2. Create reset function for user

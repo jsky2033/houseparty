@@ -20,11 +20,11 @@ body,
 }
 
 .homeCard:hover,
-.profileCard:hover {
+.profileCard:hover,
+.houseCard:hover {
   cursor: pointer;
   background-color: rgb(245, 245, 245);
 }
-
 
 /* for screen sizes 730px and below */
 @media (max-width: 730px) {

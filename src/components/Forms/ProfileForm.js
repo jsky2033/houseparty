@@ -82,8 +82,8 @@ export default function ProfileForm({
             className="mb-2"
             id="inlineFormInput"
             placeholder="Jane Doe"
-            name="name"
-            value={profileData.name}
+            name="username"
+            value={profileData.username}
             onChange={profileDataUpdate}
           />
           <Form.Label htmlFor="inlineFormInputGroup" visuallyHidden>

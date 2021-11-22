@@ -14,6 +14,7 @@ import Blog from "./pages/Blog";
 import Search from "./pages/Search";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import People from "./pages/People";
 
 // routes
 import PrivateRoute from "./routes/PrivateRoute";
@@ -30,6 +31,7 @@ function App() {
         <Switch>
           {/* Landing Pages */}
           <PublicRoute exact path="/" component={Home} />
+          <PublicRoute path="/people" component={People} />
           {/* Private Routes */}
           <PrivateRoute path="/profile" component={Profile} />
           <PrivateRoute path="/house" component={House} />

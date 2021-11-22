@@ -12,7 +12,12 @@ import {
 
 //icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faKey, faUser } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEnvelope,
+  faKey,
+  faPhone,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
 
 //helper functions
 import { validateInput } from "../../utilities/main";
@@ -40,6 +45,7 @@ export default function RegisterForm({ usrRegister, status }) {
     name: "",
     email: "",
     password: "",
+    phone: "",
   });
   const [validationMsg, setValidationMsg] = useState(null);
 
@@ -112,6 +118,21 @@ export default function RegisterForm({ usrRegister, status }) {
               type="email"
               name="email"
               value={usrData.email}
+              onChange={profileDataUpdate}
+              required
+            />
+          </InputGroup>
+          <Form.Label htmlFor="inlineFormInputGroup" visuallyHidden>
+            <FontAwesomeIcon icon={faPhone} style={styles.faIcon} />
+            Phone
+          </Form.Label>
+          <InputGroup className="mb-2">
+            <FormControl
+              id="inlineFormInputGroup"
+              placeholder="***-***-****"
+              type="text"
+              name="phone"
+              value={usrData.phone}
               onChange={profileDataUpdate}
               required
             />

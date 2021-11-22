@@ -6,17 +6,12 @@ import { Navbar, Nav } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 
-//apis
-// import User from "../requests/User";
-
 //firebase context
 import { useAuth } from "../contexts/AuthContext";
 
 export default function Header() {
-
-
   //Auth Context
-  const { logout, currentUser } = useAuth();
+  const { logout, currentUser, currentUserData } = useAuth();
 
   //logout handler
   const logoutUser = async () => {
@@ -47,6 +42,7 @@ export default function Header() {
           <Nav.Link href="/house">House</Nav.Link>
           <Nav.Link href="/blog">Blog</Nav.Link>
           <Nav.Link href="/search">Search</Nav.Link>
+          <Nav.Link href="/people">People</Nav.Link>
         </Nav>
         {!currentUser ? (
           <Nav>
@@ -57,7 +53,7 @@ export default function Header() {
           <Nav>
             <Nav.Link>
               <FontAwesomeIcon icon={faUser} style={styles.faIcon} />
-              {currentUser ? currentUser.email : null}
+              {currentUserData ? currentUserData.username : null}
             </Nav.Link>
             <Nav.Link onClick={logoutUser}>Logout</Nav.Link>
           </Nav>

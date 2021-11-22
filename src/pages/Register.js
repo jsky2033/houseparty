@@ -8,7 +8,7 @@ import RegisterForm from "../components/Forms/RegisterForm";
 import { useAuth } from "../contexts/AuthContext";
 
 //apis
-import User from "../requests/User";
+import { Auth } from "../requests/UserAPI";
 
 export default function Register() {
   //STATE
@@ -25,18 +25,18 @@ export default function Register() {
       const uid = response.user.uid;
 
       //register email in database
-      const expressResponse = await User.post("/registerUsr", {
-        uid: uid,
+      const expressResponse = await Auth.post("/register", {
+        authId: uid,
+        username: registerData.name,
+        phone: registerData.phone,
         email: registerData.email,
-        name: registerData.name,
-        phone: "",
+        membership: "User",
       });
-      if (expressResponse.status !== 204) {
+      if (expressResponse.status !== 200) {
         throw new Error("Database Entry failed!");
       }
     } catch (err) {
       setStatus("FAIL");
-      console.log(err);
     }
   };
 

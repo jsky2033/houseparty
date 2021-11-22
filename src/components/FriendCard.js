@@ -9,6 +9,8 @@ import {
   faUserAltSlash,
   faComment,
   faCogs,
+  faUserPlus,
+  faHouseUser,
 } from "@fortawesome/free-solid-svg-icons";
 
 //css
@@ -46,7 +48,6 @@ const default_user = {
 
 export default function FriendCard({ name, email, description, options }) {
   const act_name = name ? name : default_user.name;
-  const act_email = email ? email : default_user.email;
   const act_description = description ? description : default_user.description;
 
   return (
@@ -64,7 +65,6 @@ export default function FriendCard({ name, email, description, options }) {
         </Col>
         <Col xs={12} sm={5}>
           <h2>{act_name}</h2>
-          <p className="lead">{act_email}</p>
           <p>{act_description}</p>
         </Col>
         {options === "friends" ? (
@@ -85,9 +85,42 @@ export default function FriendCard({ name, email, description, options }) {
         ) : options === "owner" ? (
           <Col xs={12} sm={5} className="mt-3 mt-sm-0">
             <Row className="mb-3" style={styles.HMC}>
-              <Button style={styles.button} className="btn-lg">
+              <Button
+                style={styles.button}
+                className="btn-lg"
+                onClick={() => {
+                  window.location = "/profile";
+                }}
+              >
                 <FontAwesomeIcon icon={faCogs} style={styles.faIcon} />
                 Edit Profile
+              </Button>
+            </Row>
+          </Col>
+        ) : options === "housemate" ? (
+          <Col xs={12} sm={5} className="mt-3 mt-sm-0">
+            <Row className="mb-3" style={styles.HMC}>
+              <Button
+                style={styles.button}
+                className="btn-lg"
+                onClick={() => {
+                  window.location = "/profile";
+                }}
+              >
+                <FontAwesomeIcon icon={faHouseUser} style={styles.faIcon} />
+                See Profile
+              </Button>
+            </Row>
+            <Row className="mb-3" style={styles.HMC}>
+              <Button
+                style={styles.button}
+                className="btn-lg"
+                onClick={() => {
+                  window.location = "/profile";
+                }}
+              >
+                <FontAwesomeIcon icon={faUserPlus} style={styles.faIcon} />
+                Add Housemate
               </Button>
             </Row>
           </Col>

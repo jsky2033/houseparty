@@ -12,7 +12,6 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   //check if current user exists
   const { currentUser } = useAuth();
 
-  console.log(currentUser);
 
   return (
     <Route
