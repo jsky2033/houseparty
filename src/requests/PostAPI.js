@@ -4,5 +4,6 @@ import axios from "axios";
 const localDomain =  "http://localhost:5000";
 
 export default axios.create({
-  baseURL: `${localDomain}/api/houses`,
+  baseURL: `${localDomain}/api/posts`,
 });
+

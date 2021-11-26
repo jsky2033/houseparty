@@ -1,24 +1,130 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 //bootstrap
-import { Container, Form, Button, Row, Col, Card } from "react-bootstrap";
+import { Container, Row, Col, Card, Modal } from "react-bootstrap";
 
 //Semanitc UI
 import { Divider, Header, Icon } from "semantic-ui-react";
 
-//icons
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCamera } from "@fortawesome/free-solid-svg-icons";
+//components
+import PostForm from "../components/Forms/PostForm";
+
+//requests
+import PostAPI from "../requests/PostAPI";
+
+//use auth context
+import { useAuth } from "../contexts/AuthContext";
 
 export default function Blog() {
+  //getting user data from context
+  const { currentUser } = useAuth();
+
+  //STATE
+  const [postStatus, setPostStatus] = useState(null);
+  const [posts, setPosts] = useState([]);
+
+  const [showPost, setShowPost] = useState(null);
+  const handleClose = () => {
+    setShowPost(null);
+  };
+
+  const [selectedPost, setSelectedPost] = useState(null);
+
+  //STYLES
   const styles = {
-    button: {
-      width: "100%",
-    },
-    faIcon: {
-      marginRight: "1em",
+    postCard: {
+      marginBottom: "3em",
     },
   };
+
+  //USE EFFECT
+
+  useEffect(() => {
+    let isActive = true;
+
+    const getPosts = async () => {
+      const response = await PostAPI.get(`/${currentUser.uid}`);
+      setPosts(response.data);
+    };
+
+    if (isActive) {
+      getPosts();
+    }
+
+    return () => (isActive = false);
+  }, [currentUser, postStatus]);
+
+  //EVENT HANDLERS
+
+  //submit or edit post
+  const onSubmit = async (postData, edit) => {
+    try {
+      setPostStatus("PENDING");
+      var response;
+      var endStatus;
+      if (!edit) {
+        const randomNum = Math.floor(Math.random() * 7);
+        response = await PostAPI.post(`/${currentUser.uid}`, {
+          ...postData,
+          authId: currentUser.uid,
+          pictureIndex: randomNum,
+        });
+        endStatus = "SUCCESS_POST";
+      } else {
+        response = await PostAPI.put(`/${currentUser.uid}`, {
+          ...postData,
+          postId: selectedPost.postId,
+          authId: currentUser.uid,
+        });
+        endStatus = "SUCCESS_EDIT";
+      }
+      if (response.status === 200) {
+        setPostStatus(endStatus);
+      }
+    } catch (err) {
+      setPostStatus("FAIL");
+    }
+  };
+
+  const deletePost = async (postId) => {
+    try {
+      const response = await PostAPI.delete(`/${currentUser.uid}`, {
+        data: {
+          postId: postId,
+          authId: currentUser.uid,
+        },
+      });
+      if (response.status === 200) {
+        setPostStatus(`SUCCESS_DELETE on ${postId}`);
+      }
+    } catch (err) {
+      setPostStatus("FAIL_DELETE");
+    }
+  };
+
+  //REPEATED COMPONENTS
+  const filtered_posts = posts.map((item, index) => {
+    return (
+      <Card
+        key={index}
+        style={styles.postCard}
+        onClick={() => {
+          setSelectedPost({ ...item, pictureIndex: item.pictureIndex });
+          setShowPost(true);
+        }}
+        className="postCard"
+      >
+        <Card.Img
+          variant="top"
+          src={`/pictures/blog/default/test${item.pictureIndex}.svg`}
+        />
+        <Card.Body>
+          <Card.Title>{item.title}</Card.Title>
+          <Card.Text>{item.description}</Card.Text>
+        </Card.Body>
+      </Card>
+    );
+  });
 
   return (
     <Container>
@@ -31,40 +137,7 @@ export default function Blog() {
         </Divider>
       </>
 
-      <Form>
-        <Form.Group className="mb-3" controlId="formTitle">
-          <Form.Label>Enter Title</Form.Label>
-          <Form.Control type="text" placeholder="Blog Title" />
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="formDescription">
-          <Form.Label>Description</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter Description"
-            as="textarea"
-          />
-        </Form.Group>
-
-        <Row className="row-cols-1 mb-4">
-          <Col>
-            <Button className="mt-3 screenButton" size="lg">
-              <FontAwesomeIcon icon={faCamera} style={styles.faIcon} />
-              Upload Photo
-            </Button>
-          </Col>
-          <Col>
-            <Button
-              variant="primary"
-              type="submit"
-              className="mt-3 screenButton"
-              size="lg"
-            >
-              Submit
-            </Button>
-          </Col>
-        </Row>
-      </Form>
+      <PostForm onSubmit={onSubmit} postStatus={postStatus} />
 
       <>
         <Divider horizontal>
@@ -76,24 +149,23 @@ export default function Blog() {
 
         <Row className="mb-4">
           <Col></Col>
-          <Col xs={12} sm={7}>
-            <Card>
-              <Card.Img
-                variant="top"
-                src="/pictures/blog/testImages/test2.jpg"
-              />
-              <Card.Body>
-                <Card.Title>Tennessee Game Party</Card.Title>
-                <Card.Text>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit
-                  illum fuga aliquid. Magni, error itaque!
-                </Card.Text>
-              </Card.Body>
-            </Card>
+          <Col xs={12} sm={8}>
+            {filtered_posts.reverse()}
           </Col>
           <Col></Col>
         </Row>
       </>
+
+      <Modal show={showPost} onHide={handleClose}>
+        <PostForm
+          onSubmit={onSubmit}
+          postStatus={postStatus}
+          editPost={true}
+          selectedPost={selectedPost}
+          deletePost={deletePost}
+          onHide={handleClose}
+        />
+      </Modal>
     </Container>
   );
 }

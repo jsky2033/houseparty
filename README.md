@@ -1,3 +1,4 @@
+
 # App Description
 
 This is an app that allows for users to create profiles for their houses or apartments in a similar way to many social media apps. The uses for the app will be as follows:
@@ -75,10 +76,22 @@ Note that the loading functionality is needed because the firebase auth provider
 3. An inert profile page for other users needs to be functional for the user so that the app can start to be a truly multi-user system. The add housemates feature needs to be made functional here especially.
 4. Housemate groupchat feature needs to be implemented. 
 5. Geolocation of Houses on the map needs to be done and interactivity with the map needs to be implemented. 
-6. Forgot password feature needs to be implemented. 
-
+6. Implement capability to add pictures or use faker.js for everything.
+7. Implement forgot password capability.
 
 # Miscallaneous Tasks
 
 1. Create delete function for user
 2. Create reset function for user
+
+# .local feature
+
+This simply means that the environment variables will work both in development mode and production mode as well. Please note that the react project needs to be run again after changes are made to the  
+
+# Github and the lack of security with Firebase/Database keys
+
+It is important to note that the Firebase and Database keys are plainly in the github repos and public for everyone to see. This is a massive security risk if this were a real application instead of a demo application. 
+
+The reason I have avoided placing the keys in a secure local file is due to the fact that I am using Netlify and Heroku to host my application and they are currently connected to the githubs of the project in order for updates to show up faster. 
+
+Once we have moved out of the demo stage, the deployments will be de-linked from github and secure local files stored on the servers themselves will be used to provide the keys. 

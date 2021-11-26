@@ -21,7 +21,8 @@ body,
 
 .homeCard:hover,
 .profileCard:hover,
-.houseCard:hover {
+.houseCard:hover,
+.postCard:hover {
   cursor: pointer;
   background-color: rgb(245, 245, 245);
 }

@@ -72,7 +72,8 @@ export default function HouseForm({ editHouse, houseStatus, userHouse, type }) {
     }));
   };
 
-  const onSubmit = () => {
+  const onSubmit = (event) => {
+    event.preventDefault();
     editHouse(houseData, houseInfo);
   };
 
