@@ -26,7 +26,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 //components
-import FriendCard from "../components/FriendCard";
 import ProfileForm from "../components/Forms/ProfileForm";
 
 //requests
@@ -193,24 +192,7 @@ export default function Profile() {
         </Modal>
       </>
 
-      <>
-        <Divider horizontal>
-          <Header as="h4">
-            <Icon name="user plus" />
-            Housemates
-          </Header>
-        </Divider>
-
-        <Row className="row-cols-1 mb-5">
-          <Col>
-            <FriendCard options="friends" />
-          </Col>
-
-          <Col className="mt-5">
-            <FriendCard options="friends" />
-          </Col>
-        </Row>
-      </>
+      
     </Container>
   );
 }

@@ -46,7 +46,14 @@ const default_user = {
   description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit.",
 };
 
-export default function FriendCard({ name, email, description, options }) {
+export default function FriendCard({
+  name,
+  description,
+  options,
+  addHouseMate,
+  dbId,
+  deleteHouseMate,
+}) {
   const act_name = name ? name : default_user.name;
   const act_description = description ? description : default_user.description;
 
@@ -76,9 +83,15 @@ export default function FriendCard({ name, email, description, options }) {
               </Button>
             </Row>
             <Row style={styles.HMC}>
-              <Button style={styles.button} className="btn-lg">
+              <Button
+                style={styles.button}
+                className="btn-lg"
+                onClick={() => {
+                  deleteHouseMate(dbId);
+                }}
+              >
                 <FontAwesomeIcon icon={faUserAltSlash} style={styles.faIcon} />
-                Unfriend
+                Remove Housemate
               </Button>
             </Row>
           </Col>
@@ -116,7 +129,7 @@ export default function FriendCard({ name, email, description, options }) {
                 style={styles.button}
                 className="btn-lg"
                 onClick={() => {
-                  window.location = "/profile";
+                  addHouseMate(dbId);
                 }}
               >
                 <FontAwesomeIcon icon={faUserPlus} style={styles.faIcon} />
