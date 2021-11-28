@@ -1,8 +1,6 @@
 import axios from "axios";
-
-// const herokuDomain = "https://tranquil-savannah-34990.herokuapp.com";
-const localDomain =  "http://localhost:5000";
+import domain from './domain';
 
 export default axios.create({
-  baseURL: `${localDomain}/api/houses`,
+  baseURL: `${domain}/api/houses`,
 });
