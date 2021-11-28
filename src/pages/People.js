@@ -64,7 +64,7 @@ export default function People() {
   if (users) {
     userCards = users.map((item, index) => {
       return (
-        <Row className="row-cols-1 mb-5">
+        <Row className="row-cols-1 mb-5" key={index}>
           <Col>
             <FriendCard
               key={index}

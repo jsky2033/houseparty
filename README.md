@@ -95,3 +95,4 @@ It is important to note that the Firebase and Database keys are plainly in the g
 The reason I have avoided placing the keys in a secure local file is due to the fact that I am using Netlify and Heroku to host my application and they are currently connected to the githubs of the project in order for updates to show up faster. 
 
 Once we have moved out of the demo stage, the deployments will be de-linked from github and secure local files stored on the servers themselves will be used to provide the keys. 
+
