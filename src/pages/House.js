@@ -149,7 +149,7 @@ export default function House() {
             ...houseInfoParam,
           },
         });
-      } else {
+      } else { //otherwise create this house
         response = await HouseAPI.post(`/${currentUser.uid}`, {
           ...houseDataParam,
           authId: currentUser.uid,

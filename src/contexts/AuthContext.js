@@ -3,6 +3,7 @@ import { auth } from "../firebase";
 
 //database api
 import User from "../requests/UserAPI";
+import House from "../requests/HouseAPI";
 
 //firebase functions
 import {
@@ -44,7 +45,9 @@ export function AuthProvider({ children }) {
     const getUserData = async (user) => {
       const authId = user.uid;
       let userDB = await User.get(`/${authId}`);
+      let userHouse = await House.get(`/${authId}`);
       userDB.data["email"] = user.email;
+      userDB.data["dbIdHouse"] = userHouse.data.dbIdHouse;
 
       setCurrentUserData(userDB.data);
     };

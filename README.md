@@ -44,6 +44,18 @@ Automatic sign in when an account is created.
 
 Firebase has tokens it has in localstorage to tell if a user is already logged in. This is interacted with using the auth provider object exported from firebase.js. 
 
+## Firebase structure
+
+Note that the compatibility version of firebase is being used in this application. That is because most of the tutorials for the chat are in v8 while the auth functionality was built using v9.
+
+Firstly the firebase app connection needs to be initialized in the firebase file. Afterwards the initialized connection needs to be passed into the specific connections also present within the firebase software package. 
+
+Afterwards these connections can be used in conjunction with certain functions that are imported from the firebase package as well. 
+
+## Firestore
+
+Remember to change the rules to allow users to read or write to the database. 
+
 ## The auth variable
 
 This can be used to validate that the current user is logged in. 

@@ -50,6 +50,7 @@ const styles = {
   cardImg: {
     padding: "2em",
     width: "20em",
+    maxWidth: "100%",
   },
   faIcon: {
     marginRight: ".5em",
@@ -301,8 +302,8 @@ export default function UserHouse({ match }) {
               Features
             </Header>
           </Divider>
-          <Row className="row-cols-1 row-cols-md-3 mb-5 gy-3">
-            <Col className="mb-3 mb-md-0">
+          <Row className="row-cols-1 row-cols-md-2 row-cols-lg-4 mb-5 gy-3">
+            <Col className="mb-3 mb-md-4">
               <Card
                 style={styles.card2}
                 className="homeCard d-flex align-items-center"
@@ -317,9 +318,11 @@ export default function UserHouse({ match }) {
               </Card>
             </Col>
 
-            <Col className="mb-3 mb-md-0 ">
+            <Col className="mb-3 mb-md-4 ">
               <Link
-                to={{ pathname: `/userblog/${match ? match.params.dbId : null}` }}
+                to={{
+                  pathname: `/userblog/${match ? match.params.dbId : null}`,
+                }}
               >
                 <Card
                   style={styles.card2}
@@ -350,6 +353,28 @@ export default function UserHouse({ match }) {
                   <Card.Img
                     variant="top"
                     src="/pictures/house/default/map.svg"
+                    style={styles.cardImg}
+                  />
+                </Card>
+              </Link>
+            </Col>
+            <Col>
+              <Link
+                to={{ pathname: `/chat/${match ? match.params.dbId : null}` }}
+              >
+                <Card
+                  style={styles.card2}
+                  className="homeCard d-flex align-items-center mt-4 mt-md-0"
+                >
+                  <Card.Title
+                    className="mt-3 mb-5"
+                    style={{ color: "black", textAlign: "center" }}
+                  >
+                    Chat with your Housemates!
+                  </Card.Title>
+                  <Card.Img
+                    variant="top"
+                    src="/pictures/house/default/chat.svg"
                     style={styles.cardImg}
                   />
                 </Card>
