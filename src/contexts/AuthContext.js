@@ -47,7 +47,10 @@ export function AuthProvider({ children }) {
       let userDB = await User.get(`/${authId}`);
       let userHouse = await House.get(`/${authId}`);
       userDB.data["email"] = user.email;
-      userDB.data["dbIdHouse"] = userHouse.data.dbIdHouse;
+
+      if (userHouse.data) {
+        userDB.data["dbIdHouse"] = userHouse.data.dbIdHouse;
+      }
 
       setCurrentUserData(userDB.data);
     };

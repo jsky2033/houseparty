@@ -80,16 +80,16 @@ Note that the loading functionality is needed because the firebase auth provider
 3. Profile Page features complete: users can now change their profile information. 
 4. House Page re-designed and completed: users can now create a house and update information about the house. 
 5. Deployment of Express backend server using Heroku now means the app is truly online.
+6. The Blog page needs to be made functional for the user.
+7. The People page needs to be made functional for the user.
+8. An inert profile page for other users needs to be functional for the user so that the app can start to be a truly multi-user system. The add housemates feature needs to be made functional here especially.
+9. Housemate groupchat feature needs to be implemented. 
 
 # Tasks to be done
 
-1. The Blog page needs to be made functional for the user.
-2. The People page needs to be made functional for the user.
-3. An inert profile page for other users needs to be functional for the user so that the app can start to be a truly multi-user system. The add housemates feature needs to be made functional here especially.
-4. Housemate groupchat feature needs to be implemented. 
-5. Geolocation of Houses on the map needs to be done and interactivity with the map needs to be implemented. 
-6. Implement capability to add pictures or use faker.js for everything.
-7. Implement forgot password capability.
+10. Geolocation of Houses on the map needs to be done and interactivity with the map needs to be implemented. 
+11. Implement capability to add pictures or use faker.js for everything.
+12. Implement forgot password capability.
 
 # Miscallaneous Tasks
 
