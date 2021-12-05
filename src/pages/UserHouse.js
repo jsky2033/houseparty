@@ -124,8 +124,6 @@ export default function UserHouse({ match }) {
     return (isActive = false);
   }, [match]);
 
-  console.log(houseOverView);
-
   //REPEATED COMPONENTS
 
   var rendered_mates;
@@ -143,7 +141,9 @@ export default function UserHouse({ match }) {
     });
   }
 
-  if (houseOverView) {
+  // PAGE RENDER
+
+  if (houseOverView && Object.keys(houseOverView.house).length !== 0) {
     return (
       <Container>
         <div style={styles.houseInfo}>
@@ -370,7 +370,7 @@ export default function UserHouse({ match }) {
                     className="mt-3 mb-5"
                     style={{ color: "black", textAlign: "center" }}
                   >
-                    Chat with your Housemates!
+                    Chat with the Housemates!
                   </Card.Title>
                   <Card.Img
                     variant="top"
@@ -417,6 +417,25 @@ export default function UserHouse({ match }) {
       </Container>
     );
   } else {
-    return null;
+    return (
+      <Container>
+        <Divider horizontal>
+          <Header as="h4">
+            <Icon name="home" />
+            House
+          </Header>
+        </Divider>
+        <Card
+          className="houseCard"
+          onClick={() => (window.location = "/house")}
+        >
+          <div style={styles.houseInfoEmpty}>
+            <Icon name="plus" />
+            <Icon name="home" />
+            <h3>Add a House</h3>
+          </div>
+        </Card>
+      </Container>
+    );
   }
 }

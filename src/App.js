@@ -19,7 +19,6 @@ import UserHouse from "./pages/UserHouse";
 import UserBlog from "./pages/UserBlog";
 import Chat from "./pages/Chat";
 
-
 // routes
 import PrivateRoute from "./routes/PrivateRoute";
 import PublicRoute from "./routes/PublicRoute";
@@ -41,7 +40,6 @@ function App() {
           <PrivateRoute path="/house" component={House} />
           <PrivateRoute path="/blog" component={Blog} />
           <PrivateRoute path="/search" component={Search} />
-          <PrivateRoute path="/map" component={Search} />
           <PrivateRoute path="/userhouse/:dbId" component={UserHouse} />
           <PrivateRoute path="/userblog/:dbId" component={UserBlog} />
           <PrivateRoute path="/chat/:dbId" component={Chat} />

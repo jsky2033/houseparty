@@ -1,3 +1,5 @@
+
+
 //helpers
 export const validateInput = (inputData) => {
   let empty_message = null;

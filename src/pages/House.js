@@ -40,6 +40,12 @@ import HouseAPI from "../requests/HouseAPI";
 //use auth context
 import { useAuth } from "../contexts/AuthContext";
 
+//Google Maps API
+import { useLoadScript } from "@react-google-maps/api";
+import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
+// get google API key
+const googleAPI = process.env.REACT_APP_GOOGLE_MAP_API_KEY;
+
 const styles = {
   houseInfo: {},
   avatar: {
@@ -66,6 +72,11 @@ const styles = {
 };
 
 export default function House() {
+  //set up google maps api
+  useLoadScript({
+    googleMapsApiKey: googleAPI,
+  });
+
   //getting user data from context
   const { currentUserData, currentUser } = useAuth();
 
@@ -134,25 +145,33 @@ export default function House() {
     return (isActive = false);
   }, [currentUser, deletionStatus, showHouse, showHouseInfo]);
 
-  //Submission of House Card
+  // Submission of House Card
 
   const editHouse = async (houseDataParam, houseInfoParam) => {
     setHouseStatus("PENDING");
+
     try {
+      //generate a geocode for the address
+      const result = await geocodeByAddress(houseDataParam.address);
+      const latLng = await getLatLng(result[0]);
+
       var response;
-      //if the house already exists, update it
-      if (houseData) {
+      // if the house already exists, update it
+      if (houseData && latLng) {
         response = await HouseAPI.put(`/${currentUser.uid}`, {
           ...houseDataParam,
           authId: currentUser.uid,
           information: {
             ...houseInfoParam,
           },
+          geoCode: latLng,
         });
-      } else { //otherwise create this house
+      } else if (latLng) {
+        //otherwise create this house
         response = await HouseAPI.post(`/${currentUser.uid}`, {
           ...houseDataParam,
           authId: currentUser.uid,
+          geoCode: latLng,
         });
       }
       if (response.status === 200) {
@@ -160,11 +179,13 @@ export default function House() {
         handleClose();
         handleCloseInfo();
       } else {
-        throw new Error("Database update failed");
+        throw new Error(response);
       }
     } catch (err) {
       if (err.code === "auth/requires-recent-login") {
         setHouseStatus("LOGIN_AGAIN");
+      } else if (err.includes("INVALID_REQUEST")) {
+        setHouseStatus("FAIL_ADDRESS");
       } else {
         setHouseStatus("FAIL");
       }

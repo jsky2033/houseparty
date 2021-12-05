@@ -1,4 +1,3 @@
-const herokuDomain = "https://tranquil-savannah-34990.herokuapp.com";
-// const localDomain = "http://localhost:5000";
+const domain = process.env.REACT_APP_LOCAL_DOMAIN;
 
-export default herokuDomain;
+export default domain;

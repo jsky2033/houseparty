@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Navbar, Nav } from "react-bootstrap";
+import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 
 //router dom components
 import { Link } from "react-router-dom";
@@ -11,6 +11,8 @@ import {
   faUser,
   faHouseUser,
   faComments,
+  faMapMarkedAlt,
+  faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 
 //firebase context
@@ -38,20 +40,74 @@ export default function Header() {
     },
   };
 
-  console.log(currentUserData);
-
   return (
     <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
       <Navbar.Brand href="/">HouseParty</Navbar.Brand>
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto">
-          <Nav.Link href="/">Home</Nav.Link>
-          <Nav.Link href="/house">House</Nav.Link>
-          <Nav.Link href="/blog">Blog</Nav.Link>
-          <Nav.Link href="/search">Search</Nav.Link>
-          <Nav.Link href="/people">People</Nav.Link>
+          {currentUser ? (
+            <>
+              <Nav.Link>
+                <Link
+                  to={{
+                    pathname: `/userhouse/${
+                      currentUserData ? currentUserData.dbId : null
+                    }`,
+                  }}
+                  className="topLinks"
+                  style={styles.button}
+                >
+                  <FontAwesomeIcon icon={faHouseUser} style={styles.faIcon} />
+                  Your House
+                </Link>
+              </Nav.Link>
+              <Nav.Link>
+                <Link
+                  to={{
+                    pathname: `/userblog/${
+                      currentUserData ? currentUserData.dbId : null
+                    }`,
+                  }}
+                  className="topLinks"
+                  style={styles.button}
+                >
+                  <FontAwesomeIcon icon={faHouseUser} style={styles.faIcon} />
+                  Your Blog
+                </Link>
+              </Nav.Link>
+              <Nav.Link>
+                <Link
+                  to={{
+                    pathname: `/chat/${
+                      currentUserData ? currentUserData.dbIdHouse : null
+                    }`,
+                  }}
+                  className="topLinks"
+                  style={styles.button}
+                >
+                  <FontAwesomeIcon icon={faComments} style={styles.faIcon} />
+                  House Chat
+                </Link>
+              </Nav.Link>
+              <Nav.Link href="/search" className="topLinks">
+                <FontAwesomeIcon icon={faMapMarkedAlt} style={styles.faIcon} />
+                Map
+              </Nav.Link>
+              <Nav.Link href="/people" className="topLinks" s>
+                <FontAwesomeIcon icon={faUsers} style={styles.faIcon} />
+                People
+              </Nav.Link>
+
+              <NavDropdown title="Options" id="basic-nav-dropdown">
+                <NavDropdown.Item href="/house">Edit House</NavDropdown.Item>
+                <NavDropdown.Item href="/blog">Edit Blog</NavDropdown.Item>
+              </NavDropdown>
+            </>
+          ) : null}
         </Nav>
+
+        <Nav></Nav>
 
         {!currentUser ? (
           <Nav>
@@ -60,34 +116,6 @@ export default function Header() {
           </Nav>
         ) : (
           <Nav>
-            <Nav.Link>
-              <Link
-                to={{
-                  pathname: `/userhouse/${
-                    currentUserData ? currentUserData.dbId : null
-                  }`,
-                }}
-                className="topLinks"
-                style={styles.button}
-              >
-                <FontAwesomeIcon icon={faHouseUser} style={styles.faIcon} />
-                Your House
-              </Link>
-            </Nav.Link>
-            <Nav.Link>
-              <Link
-                to={{
-                  pathname: `/chat/${
-                    currentUserData ? currentUserData.dbIdHouse : null
-                  }`,
-                }}
-                className="topLinks"
-                style={styles.button}
-              >
-                <FontAwesomeIcon icon={faComments} style={styles.faIcon} />
-                House Chat
-              </Link>
-            </Nav.Link>
             <Nav.Link href="/profile" className="topLinks">
               <FontAwesomeIcon icon={faUser} style={styles.faIcon} />
               {currentUserData ? currentUserData.username : null}

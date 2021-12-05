@@ -77,8 +77,6 @@ export default function HouseForm({ editHouse, houseStatus, userHouse, type }) {
     editHouse(houseData, houseInfo);
   };
 
-  console.log(type);
-
   return (
     <div style={styles.card}>
       {houseStatus === "SUCCESS" ? (
@@ -89,6 +87,8 @@ export default function HouseForm({ editHouse, houseStatus, userHouse, type }) {
         <Alert variant="danger">An error has ocurred</Alert>
       ) : houseStatus === "LOGIN_AGAIN" ? (
         <Alert variant="danger">Please login again to change settings</Alert>
+      ) : houseStatus === "FAIL_ADDRESS" ? (
+        <Alert variant="danger">Could not validate this address</Alert>
       ) : null}
       <Row>
         <Col xs={12}>
