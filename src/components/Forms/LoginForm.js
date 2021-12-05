@@ -8,7 +8,11 @@ import {
   Button,
   Alert,
   Image,
+  Card,
 } from "react-bootstrap";
+
+//router dom
+import { Link } from "react-router-dom";
 
 //icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -63,7 +67,7 @@ export default function LoginForm({ usrLogin, status }) {
   };
 
   return (
-    <div style={styles.card}>
+    <Card style={styles.card}>
       {status === "SUCCESS" ? (
         <Alert variant="success">Login Success</Alert>
       ) : status === "PENDING" ? (
@@ -104,6 +108,7 @@ export default function LoginForm({ usrLogin, status }) {
             <FontAwesomeIcon icon={faKey} style={styles.faIcon} />
             Password
           </Form.Label>
+
           <InputGroup className="mb-2">
             <FormControl
               id="inlineFormInputGroup"
@@ -114,11 +119,14 @@ export default function LoginForm({ usrLogin, status }) {
               required
             />
           </InputGroup>
+          <div className="text-center mt-3">
+            <Link to="/forgot-password">Forgot Password?</Link>
+          </div>
           <Button style={styles.btn} size="lg" onClick={onSubmit}>
             Submit
           </Button>
         </Col>
       </Row>
-    </div>
+    </Card>
   );
 }

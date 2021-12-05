@@ -83,6 +83,12 @@ body,
   color: #f9a826 !important;
 }
 
+.noLink,
+.noLink:hover {
+  text-decoration: none;
+  color: #343a40;
+}
+
 /* for screen sizes 730px and below */
 @media (max-width: 730px) {
   .screenButton {

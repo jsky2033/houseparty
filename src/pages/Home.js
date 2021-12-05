@@ -3,6 +3,9 @@ import React from "react";
 //Bootstrap
 import { Container, Row, Col, Image, Card } from "react-bootstrap";
 
+//router dom
+import { Link } from "react-router-dom";
+
 const styles = {
   houseIcon: {
     display: "flex",
@@ -77,56 +80,62 @@ export default function Home() {
         <h1 className="text-center mb-3 display-3 mt-3">Experience</h1>
         <Row className="row-cols-1 row-cols-md-3 mb-5 gy-3">
           <Col className="mb-3 mb-md-0">
-            <Card style={styles.card} className="homeCard">
-              <Card.Img
-                variant="top"
-                src="/pictures/home/buildHome.svg"
-                style={styles.cardImg}
-              />
-              <Card.Body>
-                <Card.Title>Build your House</Card.Title>
-                <Card.Text>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                  Dignissimos eum totam odit voluptates repellendus adipisci
-                  facere
-                </Card.Text>
-              </Card.Body>
-            </Card>
+            <Link to="/house" className="noLink">
+              <Card style={styles.card} className="homeCard">
+                <Card.Img
+                  variant="top"
+                  src="/pictures/home/buildHome.svg"
+                  style={styles.cardImg}
+                />
+                <Card.Body>
+                  <Card.Title>Build your House</Card.Title>
+                  <Card.Text>
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                    Dignissimos eum totam odit voluptates repellendus adipisci
+                    facere
+                  </Card.Text>
+                </Card.Body>
+              </Card>
+            </Link>
           </Col>
 
           <Col className="mb-3 mb-md-0">
-            <Card style={styles.card} className="homeCard">
-              <Card.Img
-                variant="top"
-                src="/pictures/home/houseFriends.svg"
-                style={styles.cardImg}
-              />
-              <Card.Body>
-                <Card.Title>Find new friends</Card.Title>
-                <Card.Text>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                  Dignissimos eum totam odit voluptates repellendus adipisci
-                  facere
-                </Card.Text>
-              </Card.Body>
-            </Card>
+            <Link to="/people" className="noLink">
+              <Card style={styles.card} className="homeCard">
+                <Card.Img
+                  variant="top"
+                  src="/pictures/home/houseFriends.svg"
+                  style={styles.cardImg}
+                />
+                <Card.Body>
+                  <Card.Title>Find new friends</Card.Title>
+                  <Card.Text>
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                    Dignissimos eum totam odit voluptates repellendus adipisci
+                    facere
+                  </Card.Text>
+                </Card.Body>
+              </Card>
+            </Link>
           </Col>
           <Col>
-            <Card style={styles.card} className="homeCard">
-              <Card.Img
-                variant="top"
-                src="/pictures/home/houseSearch.svg"
-                style={styles.cardImg}
-              />
-              <Card.Body>
-                <Card.Title>Look for Houses</Card.Title>
-                <Card.Text>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                  Dignissimos eum totam odit voluptates repellendus adipisci
-                  facere
-                </Card.Text>
-              </Card.Body>
-            </Card>
+            <Link to="/search" className="noLink">
+              <Card style={styles.card} className="homeCard">
+                <Card.Img
+                  variant="top"
+                  src="/pictures/home/houseSearch.svg"
+                  style={styles.cardImg}
+                />
+                <Card.Body>
+                  <Card.Title>Look for Houses</Card.Title>
+                  <Card.Text>
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                    Dignissimos eum totam odit voluptates repellendus adipisci
+                    facere
+                  </Card.Text>
+                </Card.Body>
+              </Card>
+            </Link>
           </Col>
         </Row>
       </>

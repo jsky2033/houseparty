@@ -8,6 +8,7 @@ import {
   Button,
   Alert,
   Image,
+  Card,
 } from "react-bootstrap";
 
 //icons
@@ -30,6 +31,7 @@ export default function RegisterForm({ usrRegister, status }) {
     },
     card: {
       padding: "3em",
+      marginBottom: "3em",
     },
     faIcon: {
       marginRight: ".5em",
@@ -71,7 +73,7 @@ export default function RegisterForm({ usrRegister, status }) {
   };
 
   return (
-    <div style={styles.card}>
+    <Card style={styles.card}>
       {status === "SUCCESS" ? (
         <Alert variant="success">Registration Success</Alert>
       ) : status === "PENDING" ? (
@@ -156,6 +158,6 @@ export default function RegisterForm({ usrRegister, status }) {
           </Button>
         </Col>
       </Row>
-    </div>
+    </Card>
   );
 }

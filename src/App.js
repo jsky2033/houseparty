@@ -18,6 +18,8 @@ import People from "./pages/People";
 import UserHouse from "./pages/UserHouse";
 import UserBlog from "./pages/UserBlog";
 import Chat from "./pages/Chat";
+import ForgotPassword from './pages/ForgotPassword';
+
 
 // routes
 import PrivateRoute from "./routes/PrivateRoute";
@@ -46,6 +48,7 @@ function App() {
           {/* Login Routes */}
           <LoginRoute path="/login" component={Login} />
           <LoginRoute path="/register" component={Register} />
+          <LoginRoute path="/forgot-password" component={ForgotPassword} />
         </Switch>
       </AuthProvider>
     </Router>
