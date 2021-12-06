@@ -121,7 +121,7 @@ export default function Chat({ match }) {
                   <div className="msg-user">
                     <Col>
                       <strong>{name}</strong>
-                      <p>{text}</p>
+                      <p >{text}</p>
                     </Col>
                     <Image
                       style={{ width: "5em" }}

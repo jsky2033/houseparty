@@ -36,6 +36,9 @@ import FriendCard from "../components/FriendCard";
 //requests
 import HouseAPI from "../requests/HouseAPI";
 
+//use auth context
+import { useAuth } from "../contexts/AuthContext";
+
 const styles = {
   avatar: {
     width: "10em",
@@ -73,6 +76,9 @@ const styles = {
 };
 
 export default function UserHouse({ match }) {
+  //CONTEXT DATA
+  const { currentUserData } = useAuth();
+
   //STATE
   //Modal Handling for House Card
   const [showHouseInfo, setShowHouseInfo] = useState(null);
@@ -94,6 +100,16 @@ export default function UserHouse({ match }) {
   };
   //house states
   const [houseOverView, setHouseOverView] = useState(null);
+
+  //Modal Handling for Roommate Barrier
+  const [showBarrier, setShowBarrier] = useState(null);
+
+  const handleCloseB = () => {
+    setShowBarrier(false);
+  };
+  const handleShowB = () => {
+    setShowBarrier(true);
+  };
 
   //API REQUESTS
 
@@ -141,6 +157,25 @@ export default function UserHouse({ match }) {
     });
   }
 
+  //EVENT HANDLERS
+
+  const getBlog = () => {
+    if (currentUserData && houseOverView) {
+      let housemateFound = false;
+      for (var houseMate of houseOverView.housemates) {
+        if (houseMate.dbId === currentUserData.dbId) {
+          housemateFound = true;
+        }
+      }
+      if (housemateFound) {
+        window.location = `/userblog/${match ? match.params.dbId : null}`;
+      } else {
+        handleShowB();
+      }
+    }
+  };
+
+  
   // PAGE RENDER
 
   if (houseOverView && Object.keys(houseOverView.house).length !== 0) {
@@ -192,6 +227,20 @@ export default function UserHouse({ match }) {
                         style={styles.faIcon}
                       />
                       Zip Code
+                    </Form.Label>
+                    <Form.Control
+                      className="mb-2"
+                      id="inlineFormInput"
+                      placeholder={houseOverView.house.zipCode}
+                      readOnly
+                    />
+
+                    <Form.Label htmlFor="inlineFormInput" visuallyHidden>
+                      <FontAwesomeIcon
+                        icon={faDollarSign}
+                        style={styles.faIcon}
+                      />
+                      Rent Description
                     </Form.Label>
                     <Form.Control
                       className="mb-2"
@@ -319,25 +368,20 @@ export default function UserHouse({ match }) {
             </Col>
 
             <Col className="mb-3 mb-md-4 ">
-              <Link
-                to={{
-                  pathname: `/userblog/${match ? match.params.dbId : null}`,
-                }}
+              <Card
+                style={styles.card2}
+                className="homeCard d-flex align-items-center"
+                onClick={getBlog}
               >
-                <Card
-                  style={styles.card2}
-                  className="homeCard d-flex align-items-center"
-                >
-                  <Card.Title className="mt-3 mb-5" style={{ color: "black" }}>
-                    Check out the Blog!
-                  </Card.Title>
-                  <Card.Img
-                    variant="top"
-                    src="/pictures/house/default/blog2.svg"
-                    style={styles.cardImg}
-                  />
-                </Card>
-              </Link>
+                <Card.Title className="mt-3 mb-5" style={{ color: "black" }}>
+                  Check out the Blog!
+                </Card.Title>
+                <Card.Img
+                  variant="top"
+                  src="/pictures/house/default/blog2.svg"
+                  style={styles.cardImg}
+                />
+              </Card>
             </Col>
             <Col>
               <Link
@@ -359,9 +403,7 @@ export default function UserHouse({ match }) {
               </Link>
             </Col>
             <Col>
-              <Link
-                to={{ pathname: `/chat/${match ? match.params.dbId : null}` }}
-              >
+              <Link to={{ pathname: `/chat/${houseOverView.dbIdHouse}` }}>
                 <Card
                   style={styles.card2}
                   className="homeCard d-flex align-items-center mt-4 mt-md-0"
@@ -413,6 +455,20 @@ export default function UserHouse({ match }) {
               </Row>
             </div>
           )}
+        </Modal>
+        <Modal show={showBarrier} onHide={handleCloseB}>
+          <div className="p-4">
+            <Divider horizontal>
+              <Header as="h4">
+                <Icon name="times circle" />
+                You are not a housemate!
+              </Header>
+            </Divider>
+            <p>
+              You must be a housemate to view this house blog. Please contact
+              the owner and ask them to add you first.
+            </p>
+          </div>
         </Modal>
       </Container>
     );

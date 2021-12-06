@@ -119,6 +119,18 @@ export default function HouseForm({ editHouse, houseStatus, userHouse, type }) {
                 />
               </InputGroup>
               <Form.Label htmlFor="inlineFormInputGroup" visuallyHidden>
+                <FontAwesomeIcon icon={faDollarSign} style={styles.faIcon} />
+                Rent Description
+              </Form.Label>
+              <InputGroup className="mb-2">
+                <FormControl
+                  id="inlineFormInputGroup"
+                  name="rent"
+                  value={houseData ? houseData.rent : null}
+                  onChange={houseDataUpdate}
+                />
+              </InputGroup>
+              <Form.Label htmlFor="inlineFormInputGroup" visuallyHidden>
                 <FontAwesomeIcon icon={faPen} style={styles.faIcon} />
                 Description
               </Form.Label>

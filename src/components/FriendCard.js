@@ -31,6 +31,7 @@ export default function FriendCard({
   dbId,
   deleteHouseMate,
   phone,
+  dbIdHouse,
 }) {
   //css
   let styles = {
@@ -93,10 +94,15 @@ export default function FriendCard({
         {options === "friends" ? (
           <Col xs={12} sm={5} className="mt-3 mt-sm-0">
             <Row className="mb-3" style={styles.HMC}>
-              <Button style={styles.button} className="btn-lg">
-                <FontAwesomeIcon icon={faComment} style={styles.faIcon} />
-                Message
-              </Button>
+              <Link
+                style={styles.button}
+                to={{ pathname: `/chat/${dbIdHouse}` }}
+              >
+                <Button style={styles.button} className="btn-lg">
+                  <FontAwesomeIcon icon={faComment} style={styles.faIcon} />
+                  Message
+                </Button>
+              </Link>
             </Row>
             <Row style={styles.HMC}>
               <Button

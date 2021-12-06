@@ -84,12 +84,8 @@ Note that the loading functionality is needed because the firebase auth provider
 7. The People page needs to be made functional for the user.
 8. An inert profile page for other users needs to be functional for the user so that the app can start to be a truly multi-user system. The add housemates feature needs to be made functional here especially.
 9. Housemate groupchat feature needs to be implemented. 
-
-# Tasks to be done
-
 10. Geolocation of Houses on the map needs to be done and interactivity with the map needs to be implemented. 
-11. Implement capability to add pictures or use faker.js for everything.
-12. Implement forgot password capability.
+11. Implement forgot password capability.
 
 # Miscallaneous Tasks
 

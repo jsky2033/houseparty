@@ -226,11 +226,13 @@ export default function House() {
             name={item.username}
             deleteHouseMate={deleteHouseMate}
             dbId={item.dbId}
+            dbIdHouse = {currentUserData.dbIdHouse}
           />
         </Col>
       );
     });
   }
+
 
   return (
     <Container>
@@ -333,6 +335,20 @@ export default function House() {
                     className="mb-2"
                     id="inlineFormInput"
                     placeholder={houseData ? houseData.zipCode : null}
+                    readOnly
+                  />
+
+                  <Form.Label htmlFor="inlineFormInput" visuallyHidden>
+                    <FontAwesomeIcon
+                      icon={faDollarSign}
+                      style={styles.faIcon}
+                    />
+                    Rent Description
+                  </Form.Label>
+                  <Form.Control
+                    className="mb-2"
+                    id="inlineFormInput"
+                    placeholder={houseData ? houseData.rent : null}
                     readOnly
                   />
                 </Col>
