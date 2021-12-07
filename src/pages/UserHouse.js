@@ -28,6 +28,7 @@ import {
   faDumbbell,
   faSink,
   faTree,
+  faShoppingBasket,
 } from "@fortawesome/free-solid-svg-icons";
 
 //components
@@ -302,7 +303,7 @@ export default function UserHouse({ match }) {
                 />
 
                 <Form.Label htmlFor="inlineFormInputGroup" visuallyHidden>
-                  <FontAwesomeIcon icon={faDollarSign} style={styles.faIcon} />
+                  <FontAwesomeIcon icon={faShoppingBasket} style={styles.faIcon} />
                   Washer/Dryer
                 </Form.Label>
                 <InputGroup className="mb-2">
