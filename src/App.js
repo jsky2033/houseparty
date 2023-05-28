@@ -1,10 +1,12 @@
+import { useState } from "react";
+
 import "./App.css";
 
 //semantic UI modules
 import "semantic-ui-css/semantic.min.css";
 
 //import router modules
-import { BrowserRouter as Router, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 // pages
 import Home from "./pages/Home";
@@ -18,8 +20,10 @@ import People from "./pages/People";
 import UserHouse from "./pages/UserHouse";
 import UserBlog from "./pages/UserBlog";
 import Chat from "./pages/Chat";
-import ForgotPassword from './pages/ForgotPassword';
+import ForgotPassword from "./pages/ForgotPassword";
 
+// todo
+import Todo from "./pages/Todo";
 
 // routes
 import PrivateRoute from "./routes/PrivateRoute";
@@ -30,6 +34,8 @@ import LoginRoute from "./routes/LoginRoute";
 import { AuthProvider } from "./contexts/AuthContext";
 
 function App() {
+  const [id, setId] = useState(0);
+
   return (
     <Router>
       <AuthProvider>
@@ -37,6 +43,9 @@ function App() {
           {/* Landing Pages */}
           <PublicRoute exact path="/" component={Home} />
           <PublicRoute path="/people" component={People} />
+          <Route path="/project">
+            <Todo id={id} setId={setId} />
+          </Route>
           {/* Private Routes */}
           <PrivateRoute path="/profile" component={Profile} />
           <PrivateRoute path="/house" component={House} />
